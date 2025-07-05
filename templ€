@@ -1,3 +1,54 @@
+origami-ia/
+├── app/
+│   ├── main.py         # Serveur Flask
+│   ├── grid_model.py   # Simulation des cellules/coins/chemins
+├── templates/
+│   └── index.html      # Interface de grille visuelle
+├── static/
+│   └── logic.js        # JS de propagation, sablier, marges
+├── data/
+│   └── nodes.json      # Noeuds enregistrés
+└── README.md           # Manifesto et usage
+mkdir flask_project
+cd flask_project
+python3 -m venv venv
+source venv/bin/activate
+pip install Flask
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return jsonify(message="Hello, World!")
+
+if __name__ == '__main__':
+    app.run(debug=True)
+python app.py
+name: Flask CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install Flask
+    - name: Run Flask app
+      run: |
+        nohup python app.py &
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
